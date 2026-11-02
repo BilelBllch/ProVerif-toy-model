@@ -1,0 +1,35 @@
+# Calculs de l'attaquant.
+
+att(X) /\ att(Y) => att(pair(X,Y)).
+att(pair(X,Y)) => att(X).
+att(pair(X,Y)) => att(Y).
+
+att(X) /\ att(Y) => att(aenc(X,Y)).
+att(aenc(X,pub(Y))) /\ att(Y) => att(X).
+
+att(X) => att(pub(X)).
+
+# On écrira {m}_pk pour le chiffrement asymétrique du message
+# m avec la clef publique pk.
+
+# Protocole Needham-Schroeder-Lowe.
+# une variante de celui vu en cours, où on ajoute la clef publique de
+# b plutôt que son identité -- n'hésitez pas à changer ça
+# pour voir si ça change quelque chose.
+#
+# a -> b : {pub(ska),na}_pub(skb)
+# a <- b : {(na,nb),pub(skb)}_pub(ska)
+# a -> b : {nb}_pub(skb)
+
+att(pub(ska)).
+att(pub(skb)).
+
+# Agent a, s'adressant à un X quelconque.
+
+att(aenc(pair(pub(ska),na),pub(X))).
+att(aenc(pair(pair(na,Y),Z),pub(ska))) => att(aenc(Y,Z)).
+
+# Agent b, échangeant avec a seulement.
+
+att(aenc(pair(pub(ska),X),pub(skb))) =>
+  att(aenc(pair(pair(X,nb),pub(skb)),pub(ska))).
